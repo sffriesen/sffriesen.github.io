@@ -188,5 +188,53 @@ function buildCharts(sample) {
 
     // 3. Use Plotly to plot the data with the layout.
     Plotly.newPlot("bubble", bubbleData, bubbleLayout); 
+
+// GAUGE
+    // filter metadara array for the first object that matches the ID number selected
+    var metadata = data.metadata;
+    // Filter the data for the object with the desired sample number
+    var resultArray = metadata.filter(sampleObj => sampleObj.id == sample);
+    // console.log("metadata resultArray");
+    // console.log(resultArray);
+    var result = resultArray[0];
+    // console.log("metadata first sample");
+    // console.log(result);
+    // Use d3 to select the panel with id of `#sample-metadata`
+    console.log("metadata result")
+    console.log(result)
+
+    // create a variable that converts the washing frequency to a floating point number
+    washFreq = parseFloat(result.wfreq);
+    console.log("wash freq");
+    console.log(washFreq)
+
+    // 4. Create the trace for the gauge chart.
+    gaugeTrace = {
+      value: washFreq,
+      type: "indicator",
+      mode: "gauge+number",
+      gauge: {
+        axis: {range: [null, 10]},
+        bar: {color: "black"},
+        steps: [
+          {range: [0, 2], color: "red"},
+          {range: [2, 4], color: "orange"},
+          {range: [4, 6], color: "yellow"},
+          {range: [6, 8], color: "yellowgreen"},
+          {range: [8, 10], color: "green"},
+        ],
+        }
+      }
+  
+
+    var gaugeData = [gaugeTrace];
+    
+    // 5. Create the layout for the gauge chart.
+    var gaugeLayout = { 
+     title: "Belly Button Washing Frequency:<br> Scrubs per Week"
+    };
+
+    // 6. Use Plotly to plot the gauge data and layout.
+    Plotly.newPlot("gauge", gaugeData, gaugeLayout);
   });
 }
